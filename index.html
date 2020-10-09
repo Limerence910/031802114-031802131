@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>关系树</title>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body
+    style ="
+		background-size:100% 100%;
+		background-attachment: fixed;">
+<link href="style.css" type="text/css" rel="stylesheet"/>
+<div id="app">
+    <h1 id="welcome"  class="invisable">Welcome!</h1>
+    <el-row :gutter="20">
+        <el-col :span="6">
+            <el-input id="demo" type="textarea" :rows="30"  resize="none"
+                      height=200px placeholder="导师：张三
+2016级博士生：天一、王二、吴五
+2015级硕士生：李四、王五、许六
+2016级硕士生：刘一、李二、李三
+2017级本科生：刘六、琪七、司四
+
+刘六：JAVA、数学建模
+
+李二：字节跳动、京东云" v-model="mytext">
+            </el-input>
+            <br></br>
+            <el-button id="button" type="primary"  @click="CInput">Create the tree
+            </el-button>
+            <div class="grid-content"></div>
+
+            <el-tree
+                    :data="data"
+                    node-key="id"
+                    id="tmd"
+                    default-expand-all
+                    @node-drag-start="handleDragStart"
+                    @node-drag-enter="handleDragEnter"
+                    @node-drag-leave="handleDragLeave"
+                    @node-drag-over="handleDragOver"
+                    @node-drag-end="handleDragEnd"
+                    @node-drop="handleDrop"
+                    draggable
+                    :allow-drop="allowDrop"
+                    :allow-drag="allowDrag">
+            </el-tree>
+            <div class="grid-content"></div>
+
+        </el-col>
+    </el-row>
+</div>
+</body>
+
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/element-ui@2.13.2/lib/index.js"></script>
+<script>
+		var Main = {
+		  data() {
+			return {
+				teacher: 0,
+				mytext: '',
+				data: [],
+				Grade:[],
+				Identity: [],
+				number2: 0,
+				defaultProps: {
+					children: 'children',
+					label: 'label'
+				}
+			};
+		  },
+		  methods: {
+
+			CInput() {
+
+                lines = this.mytext.split('\n');
+
+				for (var i = 0; i < lines.length; i++){
+					parts = lines[i].split("：");
+
+					if(parts[0] === "导师"){
+						var newChild = { label: lines[0], children: [] };
+						this.data.push(newChild);
+					}
+
+					if(parts[0].search(/博士生|硕士生|本科生/) != -1){
+						parts2 = parts[0].split("级");
+						if(this.Grade.indexOf(parts2[0]) >= 0){
+							number = this.Grade.indexOf(parts2[0]);
+						}
+						else{
+							this.number2 = 0;
+							newChild = {label: parts2[0] + "级", children: []};
+							this.data[this.teacher].children.push(newChild);
+							this.Grade.push(parts2[0]);
+							number = this.Grade.indexOf(parts2[0]);
+						}
+
+						newChild = {label: parts2[1],children: []};
+						this.data[this.teacher].children[number].children.push(newChild);
+
+
+						students = parts[1].split('、');
+						for (var j = 0; j < students.length; j++){
+							newChild = {label:students[j], children: []};
+							this.data[this.teacher].children[number].children[this.number2].children.push(newChild);
+						}
+						this.number2++;
+					}
+
+				}
+				this.teacher++;
+				console.log(this.data);
+				this.Grade = [];
+				this.number = 0;
+				this.number2 = 0;
+
+			},
+
+
+
+			handleDragStart(node, ev) {
+			  console.log('drag start', node);
+			},
+			handleDragEnter(draggingNode, dropNode, ev) {
+			  console.log('tree drag enter: ', dropNode.label);
+			},
+			handleDragLeave(draggingNode, dropNode, ev) {
+			  console.log('tree drag leave: ', dropNode.label);
+			},
+			handleDragOver(draggingNode, dropNode, ev) {
+			  console.log('tree drag over: ', dropNode.label);
+			},
+			handleDragEnd(draggingNode, dropNode, dropType, ev) {
+			  console.log('tree drag end: ', dropNode && dropNode.label, dropType);
+			},
+			handleDrop(draggingNode, dropNode, dropType, ev) {
+			  console.log('tree drop: ', dropNode.label, dropType);
+			},
+			allowDrop(draggingNode, dropNode, type) {
+			  if (dropNode.data.label === '二级 3-1') {
+				return type !== 'inner';
+			  } else {
+				return true;
+			  }
+			},
+			allowDrag(draggingNode) {
+			  return draggingNode.data.label.indexOf('三级 3-2-2') === -1;
+			}
+		  }
+		};
+		var Ctor = Vue.extend(Main)
+   		new Ctor().$mount('#app')
+	</script>
+
+</html>
