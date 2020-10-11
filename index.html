@@ -7,16 +7,34 @@
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 </head>
 <body
-    style ="
+        style="
 		background-size:100% 100%;
 		background-attachment: fixed;">
 <link href="style.css" type="text/css" rel="stylesheet"/>
 <div id="app">
-    <h1 id="welcome"  class="invisable">Welcome!</h1>
-    <el-row :gutter="20">
-        <el-col :span="6">
-            <el-input id="demo" type="textarea" :rows="30"  resize="none"
-                      height=200px placeholder="导师：张三
+    <el-button @click="clearData">清空</el-button>
+    <h1 id="welcome" class="invisable"
+        style="width: 350px;
+                      height: 50px;
+                      position: absolute;
+                      top: -10px;
+                      left: 80px;
+                      border-bottom-right-radius: 10px;
+                      border-bottom-left-radius: 10px;
+                      border-top-left-radius: 10px;
+                      border-top-right-radius: 10px;">Welcome!</h1>
+
+    <el-input id="demo" type="textarea" rows="31" resize="none"
+              style="width: 350px;
+                      position: absolute;
+                      top: 110px;
+                      left: 80px;
+                      border-bottom-right-radius: 10px;
+                      border-bottom-left-radius: 10px;
+                      border-top-left-radius: 10px;
+                      border-top-right-radius: 10px;
+                        background: rgba(255, 255, 255, 0.3);"
+              placeholder="导师：张三
 2016级博士生：天一、王二、吴五
 2015级硕士生：李四、王五、许六
 2016级硕士生：刘一、李二、李三
@@ -25,30 +43,51 @@
 刘六：JAVA、数学建模
 
 李二：字节跳动、京东云" v-model="mytext">
-            </el-input>
-            <br></br>
-            <el-button id="button" type="primary"  @click="CInput">Create the tree
-            </el-button>
-            <div class="grid-content"></div>
+    </el-input>
+    <br></br>
+    <el-button id="button"
+               style="width: 150px;
+                      height: 40px;
+                      position: absolute;
+                      top: 800px;
+                      left: 170px;
+                      border-bottom-right-radius: 10px;
+                      border-bottom-left-radius: 10px;
+                      border-top-left-radius: 10px;
+                      border-top-right-radius: 10px;" type="primary" @click="CInput">Create the tree
+    </el-button>
+    <div class="grid-content"></div>
 
-            <el-tree
-                    :data="data"
-                    node-key="id"
-                    id="tmd"
-                    default-expand-all
-                    @node-drag-start="handleDragStart"
-                    @node-drag-enter="handleDragEnter"
-                    @node-drag-leave="handleDragLeave"
-                    @node-drag-over="handleDragOver"
-                    @node-drag-end="handleDragEnd"
-                    @node-drop="handleDrop"
-                    draggable
-                    :allow-drop="allowDrop"
-                    :allow-drag="allowDrag">
-            </el-tree>
-            <div class="grid-content"></div>
+    <el-tree
+            :data="data"
+            node-key="id"
+            id="tmd"
+            style="width: 1200px;
+                      height: 690px;
 
-        </el-col>
+                      position: absolute;
+                      top: 110px;
+                      left: 480px;
+                      border-bottom-right-radius: 10px;
+                      border-bottom-left-radius: 10px;
+                      border-top-left-radius: 10px;
+                      border-top-right-radius: 10px;
+                        background: rgba(255, 255, 255, 0.7);"
+            default-expand-all
+            @node-drag-start="handleDragStart"
+            @node-drag-enter="handleDragEnter"
+            @node-drag-leave="handleDragLeave"
+            @node-drag-over="handleDragOver"
+            @node-drag-end="handleDragEnd"
+            @node-drop="handleDrop"
+            draggable
+            :allow-drop="allowDrop"
+            :allow-drag="allowDrag"
+            :render-content="renderContent">
+    </el-tree>
+    <div class="grid-content"></div>
+
+    </el-col>
     </el-row>
 </div>
 </body>
@@ -56,14 +95,17 @@
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
 <script src="https://unpkg.com/element-ui@2.13.2/lib/index.js"></script>
 <script>
-		var Main = {
-		  data() {
+    var Main = {
+        data() {
 			return {
+				filterText: '',
 				teacher: 0,
+				id: 0,
 				mytext: '',
 				data: [],
 				Grade:[],
-				Identity: [],
+				Name:[],
+				Location: [],
 				number2: 0,
 				defaultProps: {
 					children: 'children',
@@ -71,88 +113,116 @@
 				}
 			};
 		  },
-		  methods: {
+        methods: {
 
-			CInput() {
+            CInput() {
+			
+            lines = this.mytext.split('\n');
+            for (var i = 0; i < lines.length; i++){
+                parts = lines[i].split("：");
+                if(parts[0] != ""){
+                    if(parts[0] === "导师"){
+                        var newChild = { id: 0, label: lines[0], children: [] };
+                        this.data.push(newChild);
+                    }
+                    else{
+                        if(parts[0].search(/博士生|硕士生|本科生/) != -1){
+                            parts2 = parts[0].split("级");
+                            if(this.Grade.indexOf(parts2[0]) >= 0){
+                                number = this.Grade.indexOf(parts2[0]);
+                            }
+                            else{
+                                this.number2 = 0;
+                                newChild = {id: -1, label: parts2[0] + "级", children: []};
+                                this.data[this.teacher].children.push(newChild);
+                                this.Grade.push(parts2[0]);
+                                number = this.Grade.indexOf(parts2[0]);
+                            }
+                            
+                            newChild = {id: -1, label: parts2[1],children: []};
+                            this.data[this.teacher].children[number].children.push(newChild);
+                        
+                            students = parts[1].split('、');
+                            for (var j = 0; j < students.length; j++){
+                                newChild = {id: this.id, label:students[j], children: []};
+                                this.data[this.teacher].children[number].children[this.number2].children.push(newChild);
+                                
+                                this.Name.push(students[j]);
+                                this.Location.push([this.teacher,number,this.number2,this.id]);
+                                this.id++;
+                            }
+                            this.id = 0;
+                            this.number2++;	
+                        }
+                        else{
+                            experience = parts[1].split('、');
+                            for(var k = 0; k < this.Name.length; k++){
+                                if(this.Name[k] === parts[0]){
+                                    for(var l = 0; l < experience.length; l++){
+                                        newChild = {label: experience[l]};
+                                        this.data[this.Location[k][0]].children[this.Location[k][1]].children[this.Location[k][2]].children[this.Location[k][3]].children.push(newChild);
+                                    }
+                                    
+                                }
+                            }
 
-                lines = this.mytext.split('\n');
+                        }
+                    }
+                }
+            }
+            this.teacher++;
+            console.log(this.data);
+            this.Grade = [];
+            this.Location = [];
+            this.Name = [];
+            this.number = 0;
+            this.number2 = 0;
+            
+        },
 
-				for (var i = 0; i < lines.length; i++){
-					parts = lines[i].split("：");
+        clearData(){
+            this.data = [];
+            this.Location = [];
+            this.Name = [];
+            this.number2 = 0;
+            this.number = 0;
+            this.teacher = 0;
+            this.id = 0;
+            this.Grade = [];
+        },
 
-					if(parts[0] === "导师"){
-						var newChild = { label: lines[0], children: [] };
-						this.data.push(newChild);
-					}
-
-					if(parts[0].search(/博士生|硕士生|本科生/) != -1){
-						parts2 = parts[0].split("级");
-						if(this.Grade.indexOf(parts2[0]) >= 0){
-							number = this.Grade.indexOf(parts2[0]);
-						}
-						else{
-							this.number2 = 0;
-							newChild = {label: parts2[0] + "级", children: []};
-							this.data[this.teacher].children.push(newChild);
-							this.Grade.push(parts2[0]);
-							number = this.Grade.indexOf(parts2[0]);
-						}
-
-						newChild = {label: parts2[1],children: []};
-						this.data[this.teacher].children[number].children.push(newChild);
-
-
-						students = parts[1].split('、');
-						for (var j = 0; j < students.length; j++){
-							newChild = {label:students[j], children: []};
-							this.data[this.teacher].children[number].children[this.number2].children.push(newChild);
-						}
-						this.number2++;
-					}
-
-				}
-				this.teacher++;
-				console.log(this.data);
-				this.Grade = [];
-				this.number = 0;
-				this.number2 = 0;
-
-			},
-
-
-
-			handleDragStart(node, ev) {
-			  console.log('drag start', node);
-			},
-			handleDragEnter(draggingNode, dropNode, ev) {
-			  console.log('tree drag enter: ', dropNode.label);
-			},
-			handleDragLeave(draggingNode, dropNode, ev) {
-			  console.log('tree drag leave: ', dropNode.label);
-			},
-			handleDragOver(draggingNode, dropNode, ev) {
-			  console.log('tree drag over: ', dropNode.label);
-			},
-			handleDragEnd(draggingNode, dropNode, dropType, ev) {
-			  console.log('tree drag end: ', dropNode && dropNode.label, dropType);
-			},
-			handleDrop(draggingNode, dropNode, dropType, ev) {
-			  console.log('tree drop: ', dropNode.label, dropType);
-			},
-			allowDrop(draggingNode, dropNode, type) {
-			  if (dropNode.data.label === '二级 3-1') {
-				return type !== 'inner';
-			  } else {
-				return true;
-			  }
-			},
-			allowDrag(draggingNode) {
-			  return draggingNode.data.label.indexOf('三级 3-2-2') === -1;
-			}
-		  }
-		};
-		var Ctor = Vue.extend(Main)
-   		new Ctor().$mount('#app')
-	</script>
+            handleDragStart(node, ev) {
+                console.log('drag start', node);
+            },
+            handleDragEnter(draggingNode, dropNode, ev) {
+                console.log('tree drag enter: ', dropNode.label);
+            },
+            handleDragLeave(draggingNode, dropNode, ev) {
+                console.log('tree drag leave: ', dropNode.label);
+            },
+            handleDragOver(draggingNode, dropNode, ev) {
+                console.log('tree drag over: ', dropNode.label);
+            },
+            handleDragEnd(draggingNode, dropNode, dropType, ev) {
+                console.log('tree drag end: ', dropNode && dropNode.label, dropType);
+            },
+            handleDrop(draggingNode, dropNode, dropType, ev) {
+                console.log('tree drop: ', dropNode.label, dropType);
+            },
+            allowDrop(draggingNode, dropNode, type) {
+                if (dropNode.data.label === '二级 3-1') {
+                    return type !== 'inner';
+                } else {
+                    return true;
+                }
+            },
+            allowDrag(draggingNode) {
+                return draggingNode.data.label.indexOf('三级 3-2-2') === -1;
+            }
+        }
+    };
+    var Ctor = Vue.extend(Main)
+    new Ctor().$mount('#app')
+</script>
 
 </html>

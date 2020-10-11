@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>关系树</title>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body
+        style="
+		background-size:100% 100%;
+		background-attachment: fixed;">
+<link href="style.css" type="text/css" rel="stylesheet"/>
+<el-row>
+    <el-col :span="24"><div class="grid-content bg-purple-dark"></div></el-col>
+  </el-row>
+  <el-row>
+    <el-col :span="12"><div class="grid-content bg-purple"></div></el-col>
+    <el-col :span="12"><div class="grid-content bg-purple-light"></div></el-col>
+  </el-row>
+  <el-row>
+    <el-col :span="8"><div class="grid-content bg-purple"></div></el-col>
+    <el-col :span="8"><div class="grid-content bg-purple-light"></div></el-col>
+    <el-col :span="8"><div class="grid-content bg-purple"></div></el-col>
+  </el-row>
+
+<div id="app">
+    <el-button @click="clearData">清空</el-button>
+    <h1 id="welcome" class="invisable"
+        style="width: 350px;
+                      height: 50px;
+                      position: absolute;
+                      top: -10px;
+                      left: 80px;
+                      border-bottom-right-radius: 10px;
+                      border-bottom-left-radius: 10px;
+                      border-top-left-radius: 10px;
+                      border-top-right-radius: 10px;">Welcome!</h1>
+
+    <el-input id="demo" type="textarea" rows="31" resize="none"
+              style="width: 350px;
+                      position: absolute;
+                      top: 110px;
+                      left: 80px;
+                      border-bottom-right-radius: 10px;
+                      border-bottom-left-radius: 10px;
+                      border-top-left-radius: 10px;
+                      border-top-right-radius: 10px;
+                        background: rgba(255, 255, 255, 0.3);"
+              placeholder="导师：张三
+2016级博士生：天一、王二、吴五
+2015级硕士生：李四、王五、许六
+2016级硕士生：刘一、李二、李三
+2017级本科生：刘六、琪七、司四
+
+刘六：JAVA、数学建模
+
+李二：字节跳动、京东云" v-model="mytext">
+    </el-input>
+    <br></br>
+    <el-button id="button"
+               style="width: 150px;
+                      height: 40px;
+                      position: absolute;
+                      top: 800px;
+                      left: 170px;
+                      border-bottom-right-radius: 10px;
+                      border-bottom-left-radius: 10px;
+                      border-top-left-radius: 10px;
+                      border-top-right-radius: 10px;" type="primary" @click="CInput">Create the tree
+    </el-button>
+    <el-input
+      placeholder="输入关键字进行过滤"
+      v-model="filterText">
+    </el-input>
+
+    <el-tree
+            :data="data"
+            node-key="id"
+            :filter-node-method="filterNode"
+            show-checkbox
+            :expand-on-click-node="false"
+            style="
+                      position: absolute;
+                      top: 110px;
+                      left: 480px;
+					  max-height: 1cm;
+					  max-lines: 25;
+                      border-bottom-right-radius: 10px;
+                      border-bottom-left-radius: 10px;
+                      border-top-left-radius: 10px;
+                      border-top-right-radius: 10px;
+                      background: rgba(255, 255, 255, 0.7);"
+            default-expand-all
+            @node-drop="handleDrop"
+            draggable
+            :allow-drop="allowDrop"
+            :allow-drag="allowDrag"
+            ref="tree">
+            <span class="custom-tree-node" slot-scope="{ node, data }">
+                <span>{{ node.label }}</span>
+                <span>
+                  <el-button
+                    type="text"
+                    size="mini"
+                    @click="() => append(node, data)"
+                    class="el-icon-plus">
+                  </el-button>
+                  <el-button
+                    type="text"
+                    size="mini"
+                    @click="() => remove(node, data)"
+                    class="el-icon-delete">
+                  </el-button>
+                </span>
+              </span>
+    </el-tree>
+
+    </el-col>
+    </el-row>
+</div>
+</body>
+
+</html>
