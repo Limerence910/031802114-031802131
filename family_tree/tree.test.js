@@ -1,5 +1,10 @@
 var Cinput_test = require('./tree.js');
 var expect = require('chai').expect;
+
+
+
+
+
 var data = [{"id":0,"label":"导师：张三","children":[{"id":1,"label":"2016级","children":[{"id":2,"label":"博士生","children":[{"id":3,"label":"天一","children":[]},{"id":4,"label":"王二","children":[]},{"id":5,"label":"吴五","children":[]}]},{"id":10,"label":"硕士生","children":[{"id":11,"label":"刘一","children":[]},{"id":12,"label":"李二","children":[{"id":21,"label":"字节跳动"},{"id":22,"label":"京东云"}]},{"id":13,"label":"李三","children":[]}]}]},{"id":6,"label":"2015级","children":[{"id":7,"label":"硕士生","children":[{"id":8,"label":"王五","children":[]},{"id":9,"label":"许六","children":[]}]}]},{"id":14,"label":"2017级","children":[{"id":15,"label":"本科生","children":[{"id":16,"label":"刘六","children":[{"id":19,"label":"JAVA"},{"id":20,"label":"数学建模"}]},{"id":17,"label":"琪七","children":[]},{"id":18,"label":"司四","children":[]}]}]}]}];
 
 describe('样例测试1', function() {

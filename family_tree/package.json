@@ -1,0 +1,17 @@
+{
+  "name": "part2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "vue-cli": "^2.9.6"
+  },
+  "devDependencies": {
+    "mocha": "^3.0.2"
+  }
+}

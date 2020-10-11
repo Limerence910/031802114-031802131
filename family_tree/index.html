@@ -56,7 +56,9 @@
                 border-top-right-radius: 10px;
                 background: rgba(255, 255, 255, 0.3);
                 box-shadow: darkgrey 10px 10px 30px 5px;"
-                placeholder="导师：张三
+                placeholder="仅能同时输入一棵树，添加并行树请先清空，示例如下：
+                
+导师：张三
 2016级博士生：天一、王二、吴五
 2015级硕士生：李四、王五、许六
 2016级硕士生：刘一、李二、李三
@@ -98,7 +100,7 @@
         node-key="id"
         :props="defaultProps"
         :filter-node-method="filterNode"
-        show-checkbox
+        
         style="
                 position: absolute;
                 top: 110px;
