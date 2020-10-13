@@ -6,6 +6,34 @@
     <script src=vue.js></script>
     <script src=index.js></script>
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <style>
+        /* Tooltip 容器 */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted black; /* 悬停元素上显示点线 */
+        }
+         
+        /* Tooltip 文本 */
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            padding: 5px 0;
+            border-radius: 6px;
+         
+            /* 定位 */
+            position: absolute;
+            z-index: 1;
+        }
+         
+        /* 鼠标移动上去后显示提示框 */
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+        }
+        </style>
 </head>
 <body
         style="
@@ -56,7 +84,8 @@
                 border-top-right-radius: 10px;
                 background: rgba(255, 255, 255, 0.3);
                 box-shadow: darkgrey 10px 10px 30px 5px;"
-                placeholder="仅能同时输入一棵树，添加并行树请先清空，示例如下：
+                placeholder="一次仅能输入一棵树，多棵树则逐次添加，示例如下：
+                
                 
 导师：张三
 2016级博士生：天一、王二、吴五
@@ -114,8 +143,7 @@
         :allow-drop="allowDrop"
         :allow-drag="allowDrag"
         ref="tree">
-        <span class="custom-tree-node" slot-scope="{ node, data }">
-        <span>{{ node.label }}</span>
+        <span class="custom-tree-node"@mouseover="overShow" @mouseout="outHide" title="tooltip" slot-scope="{ node, data }">
             <span>
                 <el-button
                         type="text"
@@ -130,6 +158,7 @@
                         class="el-icon-delete">
                 </el-button>
             </span>
+        <span  >{{ node.label  }}</span>
         </span>
     </el-tree>
 

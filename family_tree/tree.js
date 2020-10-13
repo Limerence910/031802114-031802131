@@ -17,6 +17,8 @@ var Main = {
             id: 0,
             id2: 0,
             mytext: '',
+            showText: false,
+            hideText: true,
             data: [],
             data2: [],
             data3: [],
@@ -38,7 +40,14 @@ var Main = {
             return data.label.indexOf(value) !== -1;
         },
 
-
+        overShow () {
+            this.showText = !this.showText
+            this.hideText = !this.hideText
+          },
+          outHide () {
+            this.showText = !this.showText
+            this.hideText = !this.hideText
+          },
         /*  */
         append(node,data) {
             console.log(node,data,'增加')
@@ -96,6 +105,7 @@ var Main = {
             }
 
         },
+        
 
         remove(node, data) {
             const parent = node.parent;
@@ -194,6 +204,7 @@ var Main = {
             if(flag === false){
                 this.data.push(this.data3[0]);
             }
+            console.log(JSON.stringify(this.data));
             // alert(this.data.length);
             // alert(this.data[0].children.length); 
             // alert(this.data[0].children[0].children.length); 

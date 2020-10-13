@@ -9,7 +9,12 @@ body {
     background-size: 100%;
     background-repeat: no-repeat;
 }
-
+.show{
+  display: block;
+}
+.hide{
+  display: none;
+}
 h1 {
     position: fixed;
     font-size: 50px;
